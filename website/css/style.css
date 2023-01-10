@@ -1,0 +1,34 @@
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(to bottom, #5cd9ff, #33b4f0, #00aeff);
+  margin: 0;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+.button {
+  display: inline-flex;
+  padding: 10px 10px;
+  background-color: transparent;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin: 0 5px;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+/*   font-size: 50px; */
+}
+button.active {
+  background-color: #0077c9;
+}
+#mainButtons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10%;
+}
+h1 {
+  color: #333;
+  text-align: center;
+}

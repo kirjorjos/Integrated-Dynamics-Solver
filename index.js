@@ -1,9 +1,15 @@
-let nbt = {
-  Book: {
-    id: 'minecraft:writable_book',
-    Count: { number: 1, type: 'b' },
-    tag: { pages: [ '\\.[0-9]{2}', '278362742674826.928347894', '[0-9]*\\.[0-9]{2}' ] }
-  },
-  Page: 0
-}
-let obj = require("./usefulFuctions/JSONToNbt.js")(nbt);
+const express = require('express');
+const fs = require('fs');
+
+const app = express();
+
+app.use(express.static('website'));
+
+app.get('/', (req, res) => {
+  fs.readFile('website/about/about.html', (err, data) => {
+    res.set('Content-Type', 'text/html');
+    res.send(data);
+  });
+});
+
+app.listen(8080);
