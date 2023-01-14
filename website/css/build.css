@@ -1,0 +1,9 @@
+#upload-container, #checkbox-container{
+  width: calc(50%-20px);
+  display: inline-block;
+}
+#setup-container{
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+}

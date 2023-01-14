@@ -24,10 +24,7 @@ function setButtonFontSize() {
 }
 
 // Create the buttons
-function createButtons() {
-  // Clear the buttons container
-  buttonsContainer.innerHTML = '';
-  document.getElementById("mainButtons").innerHTML = `<button class="button" style="font-size: 49px;">About</button><button class="button" style="font-size: 49px;">Simulate</button><button class="button" style="font-size: 49px;">Build</button>`
+function setupButtons() {
   
   // Loop through the buttons
   for (const button of document.getElementById("mainButtons").children) {
@@ -47,10 +44,22 @@ function createButtons() {
         // Get the response text
         const html = await response.text();
         // Update the content of the page with the new HTML
-        document.body.innerHTML = html;
-        createButtons();
+        document.getElementById("subPage").innerHTML = html;
         // Update the URL in the browser's address bar
-        window.history.pushState({}, '', `/${button.textContent.toLowerCase()}/${button.textContent.toLowerCase()}.html`);
+        window.history.pushState({}, '', `/${button.textContent.toLowerCase()}`);
+        //  Select the proper button on first page load
+        const currentPage = window.location.pathname.substring(1);
+        button.classList.add("active")
+        for (const label of ["build", "simulate", "about"]) {
+          let button = document.getElementById(`${label}Button`);
+          if (label == currentPage) {
+            button.classList.add("active");
+          } else {
+            button.classList.remove("active");
+          }
+        }
+        changeScript(`/${currentPage}/${currentPage}.js`);
+        changeCSS()
       }
       loadNewHTML();
       //  setup the bottom of the page depending which button selected
@@ -71,8 +80,13 @@ function createButtons() {
 window.addEventListener('resize', setButtonFontSize);
 
 // Create the buttons when the page is loaded
-window.addEventListener('load', createButtons);
+window.addEventListener('load', setupButtons);
 window.addEventListener('load', setButtonFontSize);
+window.addEventListener('load', () => {
+  //  Select the proper button on first page load
+  const currentPage = window.location.pathname.substring(1);
+  document.getElementById(`${currentPage}Button`).classList.add("active");
+})
 
 
 // Resize the header text when the window is resized
@@ -82,3 +96,60 @@ window.addEventListener('resize', () => {
 
 // Set the initial font size for the header text
 document.getElementById('mainTitle').style.fontSize = `${Math.max(25, window.innerWidth / 25)}px`;
+
+function changeScript(src) {
+  const oldScript = document.getElementById('dynamicScript');
+  oldScript.parentNode.removeChild(oldScript);
+
+  const newScript = document.createElement('script');
+  newScript.src = src;
+  newScript.id = 'dynamicScript';
+  document.head.appendChild(newScript);
+}
+function changeCSS() {
+  // Get the current URL
+  const currentURL = window.location.href;
+  // Extract the part of the URL after the last "/"
+  const part = currentURL.substring(currentURL.lastIndexOf("/") + 1);
+  // Create a new link element with the appropriate href
+  const newLink = document.createElement("link");
+  newLink.href = `/css/${part}.css`;
+  newLink.rel = "stylesheet";
+  newLink.type = "text/css"
+  // Remove the old link element if it exists
+  const oldLink = document.getElementById("dynamicCSS");
+  if (oldLink) {
+    oldLink.parentNode.removeChild(oldLink);
+  }
+  // Add the new link element with the ID "dynamicCSS"
+  newLink.id = "dynamicCSS";
+  document.head.appendChild(newLink);
+}
+
+
+
+// Create a function that updates the page content
+function updatePageContent() {
+  // Get the current URL
+  const currentURL = window.location.href;
+
+  // Split the URL into parts
+  const urlParts = currentURL.split('/');
+
+  // Get the last part of the URL, which should be the name of the button
+  const buttonName = urlParts[urlParts.length - 1];
+
+  // Send a request to the server to get the HTML for the button
+  fetch(`/${buttonName}/${buttonName}.html`)
+    .then((response) => response.text())
+    .then((html) => {
+      // Update the content of the page with the new HTML
+      document.getElementById("subPage").innerHTML = html;
+      changeScript(`/${buttonName}/${buttonName}.js`)
+      changeCSS();
+    });
+}
+
+// Add an event listener for the popstate event
+window.addEventListener('popstate', updatePageContent);
+window.addEventListener('load', updatePageContent);
