@@ -3,8 +3,20 @@
     <input type="checkbox" id="has-nbt" name="has-nbt" value="has-nbt">
     <label for="has-nbt">I have Integrated NBT</label>
   </section>
-  <section id="upload-container">
+  <section id="upload-toggle-container">
+    <label class="switch">
+      <input type="checkbox" id="upload-toggle" name="upload-toggle" value="upload-toggle">
+      <span class="slider"></span>
+    </label>
+    <div id="upload-text">Upload file</div>
+    <div id="paste-text">Paste NBT</div>
+  </section>
+  <section id="file-upload-container">
     <input type="file" id="file-upload" name="file-upload">
-    <button id="upload-button">Upload</button>
+    <button id="upload-button">Continue</button>
+  </section>
+  <section id="paste-nbt-container">
+    <textarea id="paste-nbt"></textarea>
+    <button id="paste-button">Continue</button>
   </section>
 </div>

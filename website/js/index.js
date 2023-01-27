@@ -48,8 +48,9 @@ function setupButtons() {
         // Update the URL in the browser's address bar
         window.history.pushState({}, '', `/${button.textContent.toLowerCase()}`);
         //  Select the proper button on first page load
-        const currentPage = window.location.pathname.substring(1);
-        button.classList.add("active")
+        let currentPage = window.location.pathname.substring(1);
+        currentPage = currentPage.split("?")[0];
+        button.classList.add("active");
         for (const label of ["build", "simulate", "about"]) {
           let button = document.getElementById(`${label}Button`);
           if (label == currentPage) {
@@ -84,7 +85,7 @@ window.addEventListener('load', setupButtons);
 window.addEventListener('load', setButtonFontSize);
 window.addEventListener('load', () => {
   //  Select the proper button on first page load
-  const currentPage = window.location.pathname.substring(1);
+  const currentPage = window.location.pathname.substring(1).split("?")[0];
   document.getElementById(`${currentPage}Button`).classList.add("active");
 })
 
@@ -104,13 +105,14 @@ function changeScript(src) {
   const newScript = document.createElement('script');
   newScript.src = src;
   newScript.id = 'dynamicScript';
+  newScript.type = "module";
   document.head.appendChild(newScript);
 }
 function changeCSS() {
   // Get the current URL
   const currentURL = window.location.href;
   // Extract the part of the URL after the last "/"
-  const part = currentURL.substring(currentURL.lastIndexOf("/") + 1);
+  const part = currentURL.substring(currentURL.lastIndexOf("/") + 1).split("?")[0];
   // Create a new link element with the appropriate href
   const newLink = document.createElement("link");
   newLink.href = `/css/${part}.css`;
@@ -137,7 +139,7 @@ function updatePageContent() {
   const urlParts = currentURL.split('/');
 
   // Get the last part of the URL, which should be the name of the button
-  const buttonName = urlParts[urlParts.length - 1];
+  const buttonName = urlParts[urlParts.length - 1].split("?")[0];
 
   // Send a request to the server to get the HTML for the button
   fetch(`/${buttonName}/${buttonName}.html`)
