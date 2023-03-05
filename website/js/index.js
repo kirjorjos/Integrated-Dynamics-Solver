@@ -1,18 +1,19 @@
 // Get a reference to the buttons container element
 const buttonsContainer = document.getElementById('mainButtons');
-
+import * as operators from './defineOperators.js';
+operators.operators();
 // Calculate the font size based on the number of buttons and the container width
 function calculateFontSize() {
   return Math.max(
     20,
-    Math.floor(buttonsContainer.offsetWidth/(
+    Math.floor(buttonsContainer.offsetWidth / (
       (() => {
-        let buttonNameList=[];
+        let buttonNameList = [];
         [...buttonsContainer.children].forEach(button => buttonNameList.push(button.innerText))
         return buttonNameList.join('').length;
       })()
     )
-  ));
+    ));
 }
 
 // Set the font size for the buttons
@@ -25,7 +26,7 @@ function setButtonFontSize() {
 
 // Create the buttons
 function setupButtons() {
-  
+
   // Loop through the buttons
   for (const button of document.getElementById("mainButtons").children) {
 
@@ -64,7 +65,7 @@ function setupButtons() {
       }
       loadNewHTML();
       //  setup the bottom of the page depending which button selected
-      switch(button.textContent.toLowerCase()) {
+      switch (button.textContent.toLowerCase()) {
         case "about":
           break;
         case "simulate":

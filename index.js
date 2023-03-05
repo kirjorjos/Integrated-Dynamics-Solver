@@ -14,3 +14,4 @@ app.get(/(about|simulate|build)$/, (req, res) => {
 app.use(express.static('website'));
 
 app.listen(8080);
+
